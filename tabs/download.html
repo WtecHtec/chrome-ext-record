@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>download</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				display: flex;
+				width: 100%;
+				height: 100vh;
+			}
+			.iframe-container {
+				width: 100%;
+				border: none;
+				height: 100vh;
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: -9999;
+				opacity: 0;
+				display: none;
+			}
+			video, .tip {
+				width: 500px;
+				margin: auto;
+			}
+		</style>
+</head>
+<body>
+		<div id="tip" class="tip"> 处理中.....</div>
+    <iframe src="./editor.html"  allowFullScreen={true} class="iframe-container"></iframe>
+		<script src="../assets/vendor/ffmpeg.min.js"></script>
+		<script src="../assets/vendor/ffmpeg-core.js"></script>
+	  <script src="../assets/tabs/download-util.js"></script>
+</body>
+</html>

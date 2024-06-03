@@ -1,0 +1,27 @@
+.perview-container {
+	position: fixed;
+	z-index: 99999;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, .4);
+	overflow: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.tip {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	color: rgb(255, 255, 255);
+	z-index: 9999;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	line-height: 100%;
+	background: rgba(0, 0, 0, .8);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

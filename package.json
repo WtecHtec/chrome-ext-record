@@ -1,0 +1,70 @@
+{
+  "name": "record-avcraft",
+  "displayName": "Record Avcraft",
+  "version": "0.0.2",
+  "description": "The current browser window tracks the mouse and records the screen",
+  "author": "R7. <504105925@qq.com>",
+  "scripts": {
+    "dev": "plasmo dev",
+    "build": "plasmo build",
+    "package": "plasmo package"
+  },
+  "dependencies": {
+    "@ffmpeg/core": "^0.12.6",
+    "@ffmpeg/ffmpeg": "^0.12.10",
+    "@ffmpeg/util": "^0.12.1",
+    "mp4-wasm": "^1.0.6",
+    "plasmo": "0.86.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "4.1.1",
+    "@types/chrome": "0.0.258",
+    "@types/node": "20.11.5",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
+    "prettier": "3.2.4",
+    "typescript": "5.3.3"
+  },
+  "manifest": {
+    "web_accessible_resources": [
+      {
+        "resources": [
+					"assets/vendor/*",
+					"assets/tabs/*",
+					"tabs/download.html",
+					"tabs/editor.html"
+        ],
+        "matches": [
+          "<all_urls>"
+        ]
+      }
+    ],
+    "host_permissions": [
+      "https://*/*",
+			"*://*/*"
+    ],
+    "permissions": [
+      "tabs",
+			"storage",
+			"scripting",
+			"unlimitedStorage"
+    ],
+    "cross_origin_embedder_policy": {
+      "value": "require-corp"
+    },
+    "cross_origin_opener_policy": {
+      "value": "same-origin"
+    },
+    "content_security_policy": {
+      "sandbox": "sandbox allow-scripts allow-modals allow-popups; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; object-src 'self';worker-src 'self' blob: ;",
+      "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; media-src 'self' data: blob: *;"
+    },
+    "sandbox": {
+      "pages": [
+				"/tabs/download.html"
+      ]
+    }
+  }
+}
