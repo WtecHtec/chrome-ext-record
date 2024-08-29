@@ -1,3 +1,6 @@
+
+let videoBase64 = '';
+let videoEvents = [];
 chrome.action.onClicked.addListener((tab) => {
   chrome.tabCapture.capture({ audio: true, video: true }, function(stream) {
     if (stream) {
@@ -49,16 +52,17 @@ chrome.runtime.onMessage.addListener(  (request, sender, sendResponse) => {
 	}
 	if (action === 'perview-video') {
 		// const blob = new Blob(datas.data, { type: 'video/webm' });
-		const { data, base64, buffer } = datas
-		chrome.storage.local.set({
-			recordbase: base64
-		}, function() {
-			console.log("Value stored successfully!");
-		});
+		const { data, base64, buffer, events } = datas
+		// chrome.storage.local.set({
+		// 	recordbase: base64
+		// }, function() {
+		// 	console.log("Value stored successfully!");
+		// });
 
-		
-		console.log('data---', data, base64);
-		 chrome.tabs.create({ url: chrome.runtime.getURL(`/tabs/download.html`) });
+		videoBase64 = base64;
+		videoEvents = events;
+		console.log('data---', data, base64, videoEvents);
+		chrome.tabs.create({ url: chrome.runtime.getURL(`/tabs/download.html`) });
 		// console.log('tab-------', tab)
 		// function func(base64) { 
 		// 	console.log('----------  chrome.scripting.executeScript run ', window, base64)
@@ -81,9 +85,9 @@ chrome.runtime.onMessage.addListener(  (request, sender, sendResponse) => {
 });
 
 const getRecordData = async (sendResponse) => {
-	const base =  await chrome.storage.local.get('recordbase')
-	console.log('get video base', base)
-	sendResponse(base)
+	// const base =  videoBase64 || await chrome.storage.local.get('recordbase')
+	// console.log('get video base', base)
+	sendResponse({ recordbase: videoBase64, events: videoEvents})
 }
 
 

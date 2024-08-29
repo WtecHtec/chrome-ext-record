@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import cssText from 'data-text:~content.css';
 import { blobToArrayBuffer, getEvenFrames, toBase64 } from "~uitls";
+import React from "react";
 
 
 export const getStyle = () => {
@@ -209,55 +210,59 @@ function IndexContent() {
 			}
 		};
 
-		mediaRecorder.onstop = function () {
-			setStatus(true)
+		mediaRecorder.onstop = async function () {
+			// setStatus(true)
 			recordInfo.current.endTime = new Date().getTime()
 			const blob = new Blob(recordedChunks, {
 				type: 'video/webm'
 			});
 			recordedChunks = [];
-			recordInfo.current.eventFrames = getEvenFrames(recordInfo.current)
-			console.log('-----', blob, recordInfo);
-			const url = URL.createObjectURL(blob);
-			setTimeout(() => {
-				videoRef.current.src = url
+			// recordInfo.current.eventFrames = getEvenFrames(recordInfo.current)
+			// const url = URL.createObjectURL(blob);
+			// setTimeout(() => {
+			// 	videoRef.current.src = url
 
 
-				videoRef.current.addEventListener('play', function () {
-					console.log(videoRef.current)
+			// 	videoRef.current.addEventListener('play', function () {
+			// 		console.log(videoRef.current)
 
-					requestAnimationFrame(drawVideoFrame)
-				})
-				videoRef.current.addEventListener('loadedmetadata', function () {
-					perviewRef.current.scale = 1080 / videoRef.current.videoWidth
-					canvasRef.current.width = 1080;
-					canvasRef.current.height = videoRef.current.videoHeight * perviewRef.current.scale;
-					exportCanvasRef.current.width = videoRef.current.videoWidth
-					exportCanvasRef.current.height = videoRef.current.videoHeight
-					setLoadVideo(true)
-				});
+			// 		requestAnimationFrame(drawVideoFrame)
+			// 	})
+			// 	videoRef.current.addEventListener('loadedmetadata', function () {
+			// 		perviewRef.current.scale = 1080 / videoRef.current.videoWidth
+			// 		canvasRef.current.width = 1080;
+			// 		canvasRef.current.height = videoRef.current.videoHeight * perviewRef.current.scale;
+			// 		exportCanvasRef.current.width = videoRef.current.videoWidth
+			// 		exportCanvasRef.current.height = videoRef.current.videoHeight
+			// 		setLoadVideo(true)
+			// 	});
 
-				videoRef.current.addEventListener('ended', async () => {
-					recorder && recorder.stop();
-					console.log('recorder------', recorder);
-					// if (perviewRef.current.type === 1) {
-					// 	console.log('关闭状态--------');
-					// 	webCodecsRef.current.videoEncoder.flush().then(() => {
-					// 		webCodecsRef.current.videoEncoder.close();
-					// 		// 可以选择保存文件或处理输出数据
-					// 		const blob = new Blob(webCodecsRef.current.outputChunks, { type: 'video/webm' });
-					// 		saveRecording(blob)
-					// 	});
-					// }
-				})
-			}, 1000)
+			// 	videoRef.current.addEventListener('ended', async () => {
+			// 		recorder && recorder.stop();
+			// 		console.log('recorder------', recorder);
+			// 		// if (perviewRef.current.type === 1) {
+			// 		// 	console.log('关闭状态--------');
+			// 		// 	webCodecsRef.current.videoEncoder.flush().then(() => {
+			// 		// 		webCodecsRef.current.videoEncoder.close();
+			// 		// 		// 可以选择保存文件或处理输出数据
+			// 		// 		const blob = new Blob(webCodecsRef.current.outputChunks, { type: 'video/webm' });
+			// 		// 		saveRecording(blob)
+			// 		// 	});
+			// 		// }
+			// 	})
+			// }, 1000)
 
 			// 处理录制完成后的数据，比如保存文件
 			// saveRecording(blob);
 
+			const base64 = await toBase64(blob)
+			const buffer = await blobToArrayBuffer(blob)
 			document.removeEventListener('mousedown', addDowns)
 			document.removeEventListener('mousemove', addMoves)
 			document.removeEventListener("keydown", addKeyDowns)
+			
+			chrome.runtime
+				.sendMessage({ action: 'perview-video', datas: { data: [], base64 , buffer, events: recordInfo.current.events } })
 		};
 
 		mediaRecorder.start();

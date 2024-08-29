@@ -143,12 +143,14 @@ async function downLoad(base64) {
 	 const videoBlob = new Blob([data.buffer], { type: "video/mp4" });
 
 	 const downUrl = URL.createObjectURL(videoBlob);
-	 const video = document.createElement('video');
-		video.src = downUrl
-		video.controls = true
-		video.style.width = '500px'
-		document.body.appendChild(video)
-		document.getElementById('tip').style.display = 'none'
+	 console.log('downUrl---',downUrl)
+	 window.frames[0].postMessage({ videoBlob, downUrl}, '*');
+	//  const video = document.createElement('video');
+	// 	video.src = downUrl
+	// 	video.controls = true
+	// 	video.style.width = '500px'
+	// 	document.body.appendChild(video)
+		// document.getElementById('tip').style.display = 'none'
 	//  console.log('downUrl---',file, URL.createObjectURL(file), data, videoBlob, downUrl)
 	//  const a = document.createElement('a');
 	//  a.style.display = 'none';

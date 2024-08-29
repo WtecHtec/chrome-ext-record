@@ -64,8 +64,7 @@ const handleStartRecord = async () => {
         padding: '16px',
 				width: '80px'
       }}>
-       <button onClick={handleStartRecord}>录制窗口</button>
-    {/* <button id="stopBtn">Stop Recording</button> */}
+       <button onClick={handleStartRecord}>开始录制</button>
     </div>
   )
 }

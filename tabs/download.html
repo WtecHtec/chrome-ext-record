@@ -18,9 +18,10 @@
 				position: absolute;
 				top: 0;
 				left: 0;
-				z-index: -9999;
+				z-index: 9999;
+				/* z-index: -9999;
 				opacity: 0;
-				display: none;
+				display: none; */
 			}
 			video, .tip {
 				width: 500px;
@@ -29,8 +30,8 @@
 		</style>
 </head>
 <body>
-		<div id="tip" class="tip"> 处理中.....</div>
-    <iframe src="./editor.html"  allowFullScreen={true} class="iframe-container"></iframe>
+		<!-- <div id="tip" class="tip"> 处理中.....</div> -->
+   		<iframe src="./editor.html"  allowFullScreen={true} class="iframe-container"></iframe>
 		<script src="../assets/vendor/ffmpeg.min.js"></script>
 		<script src="../assets/vendor/ffmpeg-core.js"></script>
 	  <script src="../assets/tabs/download-util.js"></script>
