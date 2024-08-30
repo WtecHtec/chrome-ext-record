@@ -61,7 +61,6 @@ chrome.runtime.onMessage.addListener(  (request, sender, sendResponse) => {
 
 		videoBase64 = base64;
 		videoEvents = events;
-		console.log('data---', data, base64, videoEvents);
 		chrome.tabs.create({ url: chrome.runtime.getURL(`/tabs/download.html`) });
 		// console.log('tab-------', tab)
 		// function func(base64) { 

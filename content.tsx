@@ -348,7 +348,6 @@ function IndexContent() {
 				if (event?.data.size) data.push(event.data);
 			}
 			recorder.onstop =  async () => {
-				console.log('data---', data)
 				// let url = URL.createObjectURL(new Blob(data, { type:mimeType  }));
 				//   console.log('recorder.onstop ----', url)
 				const blob = new Blob(data, { type: 'video/webm' });

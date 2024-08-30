@@ -277,3 +277,10 @@
 .opacity-0 {
 	opacity: 0;
 }
+
+.scale-update {
+	width: 400px;
+	position: relative;
+	text-align: center;
+	cursor: pointer;
+}

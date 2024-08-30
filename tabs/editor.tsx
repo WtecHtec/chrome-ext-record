@@ -47,7 +47,6 @@ export default function UpdateRender() {
       window.addEventListener('message', function(event) {
           // 这里可以添加安全性检查，例如检查 event.origin
           const message = event.data;
-          console.log('message---', message)
           setUpdated(true);
           setRecordInfo({
             videoUrl: URL.createObjectURL(message.videoBlob),
