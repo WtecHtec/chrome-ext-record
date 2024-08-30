@@ -17,11 +17,11 @@
 
 .plyr--video {
 	position: relative;
-	background-color: #000000;
+	/* background-color: #000000; */
 	overflow: hidden;
 	box-sizing: border-box;
-	max-width: 900px;
-	width: 90%;
+	/* max-width: 900px;
+	width: 90%; */
 	display: flex;
   align-items: center;
   justify-content: center;
@@ -245,6 +245,7 @@
 	position: absolute;
 	display: flex;
 	flex-direction: column;
+	z-index: 999999;
 }
 
 .dropdown-opreation {

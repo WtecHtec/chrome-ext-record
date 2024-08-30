@@ -70,25 +70,25 @@ function IndexContent() {
 
 
 
-	useEffect(() => {
-    const script = document.createElement("script");
+	// useEffect(() => {
+  //   const script = document.createElement("script");
 
-    script.src = "/assets/plugin/ffmpeg.min.js";
-    script.async = true;
+  //   script.src = "/assets/plugin/ffmpeg.min.js";
+  //   script.async = true;
 
-    // On load, set scriptLoaded to true
-    script.onload = () => {
-      // scriptLoaded.current = true;
-      // loadFfmpeg();
-			console.log('加载 ffmpeg.mini.js')
-    };
+  //   // On load, set scriptLoaded to true
+  //   script.onload = () => {
+  //     // scriptLoaded.current = true;
+  //     // loadFfmpeg();
+	// 		console.log('加载 ffmpeg.mini.js')
+  //   };
 
-    document.body.appendChild(script);
+  //   document.body.appendChild(script);
 
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  //   return () => {
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
 
 	const addKeyDowns = useThrottle((e) => {
 		recordInfo.current.events.push({
@@ -200,6 +200,10 @@ function IndexContent() {
 		mediaRecorder.onstart = () => {
 			recordInfo.current.startTime = new Date().getTime()
 			recordInfo.current.events = []
+			recordInfo.current.events.push({
+				type: 'start',
+				time: new Date().getTime(),
+			})
 			document.addEventListener("mousedown", addDowns)
 			document.addEventListener("mousemove", addMoves)
 			document.addEventListener("keydown", addKeyDowns)
@@ -260,7 +264,10 @@ function IndexContent() {
 			document.removeEventListener('mousedown', addDowns)
 			document.removeEventListener('mousemove', addMoves)
 			document.removeEventListener("keydown", addKeyDowns)
-			
+			recordInfo.current.events.push({
+				type: 'end',
+				time: new Date().getTime(),
+			})
 			chrome.runtime
 				.sendMessage({ action: 'perview-video', datas: { data: [], base64 , buffer, events: recordInfo.current.events } })
 		};

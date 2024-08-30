@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import './videoPlyer.css'
 import { formatSecondsToHMS } from './uitl';
 import React from 'react';
+import { Button, Drawer } from 'antd';
 
 function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -74,12 +75,24 @@ const VideoPlayer = (props) => {
         width: window.innerWidth,
     })
 
+
+		const [open, setOpen] = useState(false);
+
+		const showDrawer = () => {
+			setOpen(true);
+		};
+	
+		const onClose = () => {
+			setOpen(false);
+		};
+
+
     /**
      * 初始化录制视频
      */
     useEffect(() => {   
-        console.log('props', props)
         const {videoUrl, videoEvents} = props.recordInfo
+				console.log('videoUrl----', videoUrl, videoEvents)
         if (videoUrl) {
             videoRef.current.src = videoUrl
             setPlayInfo({
@@ -166,14 +179,23 @@ const VideoPlayer = (props) => {
      * @returns 
      */
     const getMinSeconds = (moveValue: number) => {
-        const diff = Math.round(moveValue / mouseEvent.current.mintimeline)
-        moveValue = Math.round(mouseEvent.current.mintimeline * diff)
+        // const diff = Math.round(moveValue / mouseEvent.current.mintimeline)
+        // moveValue = Math.round(mouseEvent.current.mintimeline * diff)
+				const diff = (moveValue / mouseEvent.current.mintimeline)
+        moveValue = (mouseEvent.current.mintimeline * diff)
         moveValue = moveValue < 0 ? 0 : (moveValue > 100 ? 100 : moveValue)
         return Math.floor(moveValue)
     }
     // time line 
     useEffect(() => {
         const onMouseMove = (e: MouseEvent) => {
+						videoRef.current?.pause()
+						setPlayInfo(per => {
+								return {
+										...per,
+										playing: false,
+								}
+						})
             const mod = timeLineRef.current?.clientWidth / 0.9 * 0.1 * 0.5
             let moveValue = Math.floor((e.clientX - mod) / timeLineRef.current?.clientWidth * 100)
             moveValue = getMinSeconds(moveValue)
@@ -360,6 +382,7 @@ const VideoPlayer = (props) => {
                 // select zoom
                 const index = target.dataset['index']
                 const item = zoomDatas[index]
+								showDrawer()
                 setAttentionEyesInfo({
                     selectIndex: index,
                     left: item.x,
@@ -405,8 +428,10 @@ const VideoPlayer = (props) => {
         if (zoomDatas.length) {
             console.log('zoomDatas-----', zoomDatas, scale)
         }
-        plyrCanvasRef.current.width = videoRef.current.clientWidth
-        plyrCanvasRef.current.height = videoRef.current.clientHeight
+				const hScale = videoRef.current.clientHeight / videoRef.current.videoHeight
+				videoRef.current.style.width =  videoRef.current.videoWidth * hScale + 'px'
+        plyrCanvasRef.current.width =  videoRef.current.videoWidth * hScale
+        plyrCanvasRef.current.height =  videoRef.current.clientHeight
         setTimeout(() => {
             drawVideoFrame();
         }, 1000);
@@ -444,6 +469,9 @@ const VideoPlayer = (props) => {
                         current: time,
                     }
                 })
+								if (!playInfo.playing) {
+									drawVideoFrame()
+								}
             })
         }
         const handelEnded = () => {
@@ -545,16 +573,13 @@ const VideoPlayer = (props) => {
     const drawVideoFrame = (type = 0) => {
 		if (type === 0 || (!videoRef.current.paused && !videoRef.current.ended)) {
             const context = plyrCanvasRef.current.getContext('2d')
-			const cw = plyrCanvasRef.current.width
-			const ch = plyrCanvasRef.current.height
-            const videoWidth = videoRef.current.videoWidth
-            const videoHeight = videoRef.current.videoHeight
-            const newScaleW = cw / videoWidth
-            const newScaleH = ch / videoHeight
-			context.clearRect(0, 0, cw, ch);
+						const cw = plyrCanvasRef.current.width
+						const ch = plyrCanvasRef.current.height
+						context.scale(1, 1);
+			      context.clearRect(0, 0, cw, ch);
             context.save()
-            context.scale(newScaleW, newScaleH);
-            context.drawImage(videoRef.current, 0, 0, videoWidth , videoHeight)
+            // context.scale(newScaleW, newScaleH);
+            context.drawImage(videoRef.current, 0, 0, cw , ch)
             context.restore()
             if (type === 1) {
                 requestAnimationFrame(drawVideoFrame.bind(this, type))
@@ -572,12 +597,12 @@ const VideoPlayer = (props) => {
                     <div className="desc"> Upload Video</div>
                     <video className="ply-video opacity-0" src="" ref={videoRef}></video>
                     <canvas className="ply-video-canvas" ref={plyrCanvasRef} ></canvas>
-                    <div className="dropdown" style={{ left: `${attentionEyesInfo.left}px`, top: `${attentionEyesInfo.top}px`, display: attentionEyesInfo.selectIndex > -1 ? 'block' : 'none' }}>
+                    {/* <div className="dropdown" style={{ left: `${attentionEyesInfo.left}px`, top: `${attentionEyesInfo.top}px`, display: attentionEyesInfo.selectIndex > -1 ? 'block' : 'none' }}>
                         <div className="attention-eyes" > </div>
                         <div className="dropdown-opreation">
                             <input type="range" onChange={onScaleChange} value={attentionEyesInfo.scale * 100} min={1} max={10} className="zoom-setting"></input>
                         </div>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>
@@ -637,6 +662,11 @@ const VideoPlayer = (props) => {
                 </div>
             </div>
         </div>
+				<Drawer title="Basic Drawer" onClose={onClose} open={open}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Drawer>
     </>
 }
 
