@@ -73,5 +73,35 @@ export const getEffectFramesByZooms = (zoomData: any, duration: number, uscale: 
             t: width / 100 * duration,
         }
     })
-    
+}
+
+
+export const formatZoomDatas = (events, duration: number, uscale: number, cscale: number, minWidth: number) => {
+	console.log('events---', events, duration, uscale, cscale)
+	const result = []
+	let lastTime = -1
+	if (events.length ) {
+		const startItem= events[0]
+		if (startItem.type !== 'start') {
+			return result;
+		}
+		for (let i = 1; i < events.length - 1; i++) {
+			const item = events[i]
+			if (item.type !== 'mousedown') continue
+			const { position } = item;
+			const zoomItem : any = {
+				...item,
+			}
+			const start = (item.time - startItem.time ) / 1000
+			zoomItem.x = position.x * uscale
+			zoomItem.y = position.y * uscale
+			zoomItem.width = minWidth
+			zoomItem.left = (item.time - startItem.time) / 1000 / duration * 100
+			if ( start > lastTime && (start   + 2 < duration)) {
+				result.push(zoomItem)
+				lastTime = start + 2
+			}
+		}
+ 	}
+	return result;
 }

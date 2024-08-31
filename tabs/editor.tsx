@@ -6,6 +6,7 @@ import VideoPlayer from './component/videoPlyer';
 let videoEvents = [];
 export default function UpdateRender() {
   const [updated, setUpdated] = useState(false);
+	const [exported, setExported] = useState(false);
   const [recordInfo, setRecordInfo] = useState({
     videoUrl: '',
     videoEvents: [],
@@ -16,7 +17,7 @@ export default function UpdateRender() {
 						// const blob =  base64ToUint8Array(response.recordbase)
 						// const bufUrl = URL.createObjectURL(blob);
             // console.log('response----updated----', bufUrl);
-            videoEvents = response.events
+            // videoEvents = response.events
 					  window.parent.postMessage(response, '*')
             // setUpdated(true);
             // setRecordInfo({
@@ -50,7 +51,7 @@ export default function UpdateRender() {
           setUpdated(true);
           setRecordInfo({
             videoUrl: URL.createObjectURL(message.videoBlob),
-            videoEvents: videoEvents,
+            videoEvents: message.videoEvents,
           })
       });
     
@@ -73,10 +74,24 @@ export default function UpdateRender() {
     </>
   );
 
+	const onExport = () => {
+		setExported(true);
+	}
   return (
    <>
+	 		{
+				exported && <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', zIndex: 999999 }}>
+					<div className="container">
+						<div className="loading">
+							<UpdateIng></UpdateIng>
+						</div>
+					</div>
+				</div> 
+			}
       {updated
-        ? <VideoPlayer recordInfo={recordInfo} playerRect={{width: window.innerWidth, height: window.innerHeight}}></VideoPlayer> 
+        ? <VideoPlayer recordInfo={recordInfo}
+					playerRect={{width: window.innerWidth, height: window.innerHeight}}
+					onExport={onExport}></VideoPlayer> 
         :  <div className="container">
             <div className="loading">
               <UpdateIng></UpdateIng>

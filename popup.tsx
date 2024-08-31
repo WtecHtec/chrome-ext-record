@@ -1,6 +1,8 @@
 import { useState } from "react"
+import './popup.css'
 let mediaRecorder;
 let recordedChunks = [];
+
 function IndexPopup() {
   const [data, setData] = useState("")
  const startRecording = (stream) => {
@@ -62,9 +64,9 @@ const handleStartRecord = async () => {
     <div
       style={{
         padding: '16px',
-				width: '80px'
+				width: '100px'
       }}>
-       <button onClick={handleStartRecord}>开始录制</button>
+       <button onClick={handleStartRecord} className="button" >开始录制</button>
     </div>
   )
 }

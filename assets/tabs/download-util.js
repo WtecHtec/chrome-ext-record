@@ -39,7 +39,7 @@ window.addEventListener('message', async function(event) {
 	console.log('Received message from parent page:', event, event.data);  
 	// 检查消息的来源，确保它来自我们期望的父页面  
 	if (event && event.data && event.data.recordbase) {
-		downLoad(event.data.recordbase)
+		downLoad(event.data.recordbase, event.data.action || 0, event.data.events )
 		// const buf =  await base64ToUint8Array(event.data.recordbase)
 		// // 假设 uint8Array 是包含MP4视频数据的 Uint8Array 对象  
 		// // // 创建一个 Blob 对象，type 为 'video/mp4'  
@@ -97,7 +97,8 @@ function base64ToUint8Array(base64) {
 
   return bytes;
 }
-async function downLoad(base64) {
+
+async function downLoad(base64, type = 0, events = []) {
 	const buf =  await base64ToUint8Array(base64)
 	// 假设 uint8Array 是包含MP4视频数据的 Uint8Array 对象  
 
@@ -148,8 +149,16 @@ async function downLoad(base64) {
 	 const videoBlob = new Blob([data.buffer], { type: "video/mp4" });
 
 	 const downUrl = URL.createObjectURL(videoBlob);
-	 console.log('downUrl---',downUrl)
-	 window.frames[0].postMessage({ videoBlob, downUrl}, '*');
+		if (type === 0) {
+			window.frames[0].postMessage({ videoBlob, downUrl, videoEvents: events}, '*');
+		} else {
+				const video = document.createElement('video');
+				video.src = downUrl
+				video.controls = true
+				video.style.width = '500px'
+				document.body.appendChild(video)
+				document.getElementsByClassName('iframe-container')[0].style.display = 'none'
+		}
 	//  const video = document.createElement('video');
 	// 	video.src = downUrl
 	// 	video.controls = true

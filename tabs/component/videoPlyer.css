@@ -284,3 +284,9 @@
 	text-align: center;
 	cursor: pointer;
 }
+
+.export-canvas {
+	position: absolute;
+	z-index: -999999;
+	top: -200%;
+}

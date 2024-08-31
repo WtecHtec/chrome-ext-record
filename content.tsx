@@ -205,8 +205,8 @@ function IndexContent() {
 				time: new Date().getTime(),
 			})
 			document.addEventListener("mousedown", addDowns)
-			document.addEventListener("mousemove", addMoves)
-			document.addEventListener("keydown", addKeyDowns)
+			// document.addEventListener("mousemove", addMoves)
+			// document.addEventListener("keydown", addKeyDowns)
 		}
 		mediaRecorder.ondataavailable = function (event) {
 			if (event.data.size > 0) {
