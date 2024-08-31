@@ -1,7 +1,7 @@
 {
-  "name": "record-avcraft",
-  "displayName": "Record Avcraft",
-  "version": "0.0.2",
+  "name": "ZoomInVideoRecorder",
+  "displayName": "放大镜录屏",
+  "version": "0.1.0",
   "description": "The current browser window tracks the mouse and records the screen",
   "author": "R7. <504105925@qq.com>",
   "scripts": {
